@@ -1,150 +1,63 @@
-# Fluid Simulation using SPH (Smooth Particle Hydrodynamics)
+# 🌊 2D SPH Fluid Simulator
 
-A research-inspired 2D particle-based fluid simulation implemented in C++, powered by SDL3, OpenGL, and ImGui.
-This project demonstrates the fundamentals of Smooth Particle Hydrodynamics (SPH) for real-time fluid simulation, balancing numerical stability, efficiency, and visual clarity.
+![C++](https://img.shields.io/badge/Language-C++17-blue)
+![OpenGL](https://img.shields.io/badge/Graphics-OpenGL-red)
+![SDL3](https://img.shields.io/badge/Window-SDL3-green)
 
-## Abstract
+A high-performance, real-time 2D fluid solver implementing the **Smooth Particle Hydrodynamics (SPH)** method. Written in modern C++, this project leverages OpenGL for rendering and ImGui for dynamic, on-the-fly parameter tuning. 
 
-Fluid Simulation has been a cornerstone problem in both physics-based animation and real-world engineering. This project presents a 2D SPH-based fluid solver implemented from scratch. It integrates real-time visualization via OpenGL and interactive parameter control with ImGui. The work takes inspiration from Sebastian Lague’s intuitive visualizations and is guided by [research literature in SPH modeling], blending theoretical insights with practical engineering.
+Designed to bridge theoretical computational fluid dynamics (CFD) with real-time interactive graphics, this solver bypasses traditional grid-based Navier-Stokes limitations in favor of a mesh-free, Lagrangian particle formulation.
 
-The simulation models fluid as a collection of discrete particles whose properties (density, pressure, velocity) are computed by weighted kernel interpolation. This method is widely used in computer graphics and computational physics due to its mesh-free, flexible nature.
+## ✨ Key Features
 
-## 1. Introduction
+* **Mesh-Free Lagrangian Simulation:** Accurately models fluid dynamics using discrete particle interactions, naturally handling complex topological changes like splashing and merging.
+* **Real-Time Parameter Control:** Fully integrated ImGui dashboard allows instant manipulation of pressure stiffness, smoothing radius, and system gravity.
+* **Optimized Neighbor Search:** Implements a uniform spatial grid partition to accelerate neighbor-finding within the smoothing radius $h$, maintaining interactive framerates.
+* **Data Visualization:** Real-time color-mapping of particles based on localized density and pressure fields for deep analytical feedback.
 
-Fluid dynamics has historically been modeled using grid-based methods (e.g., **Navier–Stokes solvers on structured grids**). However, SPH provides a mesh-free, particle-driven formulation, where the fluid is represented as a discrete set of particles. Each particle carries physical properties (mass, velocity, density, pressure) and interacts with its neighbors through smoothing kernels.
+## 📐 Mathematical Formulation
 
-The objective of this project is to **simulate fluid-like behavior in 2D** while maintaining real-time interactivity. Users can manipulate parameters dynamically using the ImGui interface, making the system both a simulation tool and a learning platform.
+The engine solves a weakly compressible model of fluid flow using standard SPH interpolation theory. Continuous field properties are approximated across discrete particles using the **Poly6 Smoothing Kernel**.
 
-## 2. Governing Equations
-
-The system is modeled using the fundamental SPH interpolation equations.
-
-2.1 SPH Interpolation
-
-A continuous field property **A(r)** is approximated as:
-
-![interpolation equation](Fluid-Simulator/images/interpolation.png)
-
-Where W is the smoothing kernel, h is the smoothing length, and the sum is over neighboring particles.
-
-
-- **Aj ​→ property of particle 𝑗**
-- **𝑚𝑗 → mass of particle 𝑗**
-- **ρj → density of particle 𝑗**
-- **𝑊 → smoothing kernel (Poly6 used here)**
-- **h → smoothing radius**
-
-## 2.2 Density Estimation
-
-The density at particle i is computed as:
+### Density Estimation
+To ensure mass conservation, the localized density at particle $i$ is calculated by summing the mass contributions of all neighboring particles $j$ within the smoothing radius:
 
 ![density equation](Fluid-Simulator/images/Density.png)
 
-This ensures mass conservation and defines the compressibility of the fluid.
-
-## 2.3 Pressure and Equation of State
-
-Fluid pressure is obtained using a simplified equation of state:
+### Equation of State (Tait's Equation)
+Fluid pressure is derived from the density variance against a target rest density ($\rho_0$). The stiffness multiplier ($k$) dictates the incompressibility of the fluid:
 
 ![pressure equation](Fluid-Simulator/images/pressure.png)
 
-- **Pi ​ → pressure of particle 𝑖**
-- **ρ0 ​→ target rest density**
-- **k → pressure multiplier (stiffness factor)**
-
-## 2.4 Pressure Force
-
-The pressure gradient between particles contributes to the net force:
+### Pressure Gradient Force
+The resulting pressure differential between interacting particles drives the fluid motion, calculated via a symmetric pressure gradient formulation to satisfy Newton's Third Law:
 
 ![pressure force equation](Fluid-Simulator/images/pForce.png)
 
-- **F_pressure ​→ pressure force on particle 𝑖**
-- **mj → mass of particle 𝑗**
-- **Pi, Pj → pressures of particles 𝑖 and 𝑗**
-- **ρi, ρj → densities of particles 𝑖 and 𝑗**
-
-## 2.5 Smoothing Kernel
-
-This project uses the Poly6 Kernel in 2D:
-
+*(Kernel formulation reference)*:
 ![poly6 kernel equation](Fluid-Simulator/images/kernel.png)
+*Where $r$ is the scalar distance between particles, $h$ is the smoothing length, and $C$ is the normalization constant.*
 
-**Where r is the distance between particles, h is the smoothing length, and C is a normalization constant.**
+## ⚙️ System Architecture
 
-## 3. Implementation Details
+* **Integration Scheme:** Temporal advancement is handled via an Explicit Euler integrator, updating particle kinematics ($x, v$) based on accumulated internal (pressure) and external (gravity) forces.
+* **Boundary Handling:** Particles are constrained within a localized coordinate space using penalty-based collision responses to prevent domain escape and simulate rigid container walls.
+* **Rendering Pipeline:** Data is pushed directly to the GPU via OpenGL, rendering discrete points mapped to dynamic color gradients representing physical states.
 
-The simulation is implemented in C++ with the following key components:
+## 🚀 Getting Started
 
-- **Particle System**: Each particle is represented as a struct containing position, velocity, density, pressure, and force vectors.
+**Prerequisites:**
+*   A C++17 compatible compiler (GCC, Clang, or MSVC)
+*   **SDL3** development libraries installed
+*   **OpenGL** headers
 
-- **Neighbor Search**: A spatial grid is used to efficiently find neighboring particles within the smoothing radius.
+```bash
+# Clone the repository
+git clone [https://github.com/AkshatSingh-90056/Fluid-Simulator.git](https://github.com/AkshatSingh-90056/Fluid-Simulator.git)
+cd Fluid-Simulator
 
-- **Time Integration**: A simple explicit Euler method is used to update particle positions and velocities based on computed forces.
+# Build the project using Make
+make
 
-- **Boundary Conditions**: Particles are constrained within a defined simulation box, with simple collision response to prevent escape.
-
-- **Rendering**: OpenGL is used to visualize particles as points, with color coding based on density or pressure for better visual feedback.
-
-- **User Interface**: ImGui provides a real-time interface for adjusting simulation parameters such as viscosity, pressure stiffness, and particle count.
-
-## 4. Results and Discussion
-
-The simulation successfully demonstrates fluid-like behavior, including splashing, merging, and settling. The real-time parameter adjustment allows users to explore different fluid properties interactively.
-
-### Performance
-
-The simulation runs efficiently at interactive frame rates for moderate particle counts (up to a few thousand particles). Performance can be further optimized by implementing more advanced neighbor search techniques (e.g., spatial hashing or k-d trees).
-
-### Limitations
-
-- The current implementation is limited to 2D and does not account for complex boundary interactions or surface tension effects.
-
-- Numerical stability can be an issue at high particle densities or extreme parameter values, requiring careful tuning.
-- The explicit Euler integration method may lead to inaccuracies over long simulation times; more advanced integrators could improve stability.
-
-## 5. Conclusion
-
-This project presents a foundational implementation of 2D fluid simulation using the SPH method. It combines theoretical principles with practical coding techniques to create an interactive and educational tool. Future work could extend the simulation to 3D, incorporate more sophisticated physical effects, and optimize performance for larger particle systems.
-
-
-## 6. Future Work
-
-To evolve this from an intermediate to an advanced-level SPH simulator, the following features are planned:
-
--  Viscosity modeling (artificial and physical viscosity)
-
--  Surface tension for realistic droplet formation
-
--  PCISPH/DFSPH solvers for incompressibility
- 
--  GPU acceleration for large-scale real-time simulation
- 
--  Fluid–rigid body coupling
-
-
-## 7. References
-
-- **Sebastian Lague's SPH Series**: [YouTube Link](https://www.youtube.com/watch?v=rSKMYc1CQHE&t=355s)
-- **SPH Research Papers**: [A Comprehensive Introduction to SPH](https://www.researchgate.net/publication/220660290_A_comprehensive_introduction_to_SPH_method)
-- **SDL3 Documentation**: [SDL Official Site](https://www.libsdl.org/)
-- **ImGui Documentation**: [ImGui GitHub](https://github.com/ocornut/imgui)
-- **OpenGL Documentation**: [OpenGL Official Site](https://www.opengl.org/)
-
-
-
-### Note:
-
-This project bridges the gap between theory and practice. It begins as an educational framework for learning SPH, but with extensions, it can evolve into a research-grade fluid solver suitable for graphics and engineering applications.
-
-
-## 8. Screenshots
-
-- **Normal Simulation wave nature**
-![Fluid Simulation Screenshot](Fluid-Simulator/images/sim(2).png)
-
-- **Normal state or rest state**
-![Fluid Simulation Screenshot](Fluid-Simulator/images/sim(3).png)
-- **Creating air pressure in the water to simulate flow of water over it**
-![Fluid Simulation Screenshot](Fluid-Simulator/images/sim(4).png)
-- **Creating a high water tide**
-![Fluid Simulation Screenshot](Fluid-Simulator/images/sim(5).png)
+# Run the executable
+./main
