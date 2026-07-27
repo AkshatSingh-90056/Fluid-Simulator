@@ -51,6 +51,13 @@ The resulting pressure differential between interacting particles drives the flu
 *   **SDL3** development libraries installed
 *   **OpenGL** headers
 
+## 🚀 Getting Started
+
+**Prerequisites:**
+*   A C++17 compatible compiler (GCC, Clang, or MSVC)
+*   **SDL3** development libraries installed
+*   **OpenGL** headers
+
 ```bash
 # Clone the repository
 git clone [https://github.com/AkshatSingh-90056/Fluid-Simulator.git](https://github.com/AkshatSingh-90056/Fluid-Simulator.git)
@@ -61,3 +68,16 @@ make
 
 # Run the executable
 ./main
+```
+
+
+## 📈 Roadmap & Future Enhancements
+**While currently serving as a foundational SPH framework, the architecture is designed with extensibility in mind. Planned upgrades include:**
+
+*  [ ] Advanced Solvers: Implementation of PCISPH or DFSPH for strict incompressibility and larger time steps.
+
+*  [ ] Physical Viscosity & Surface Tension: Integrating cohesive forces for realistic droplet formation and fluid resistance.
+
+*  [ ] Hardware Acceleration: Migrating the neighbor search and force computation to GPU Compute Shaders (CUDA/OpenGL) for massive-scale particle counts.
+
+*  [ ] Two-Way Coupling: Fluid-rigid body interaction mechanics.
