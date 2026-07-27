@@ -3,7 +3,7 @@
 A research-inspired 2D particle-based fluid simulation implemented in C++, powered by SDL3, OpenGL, and ImGui.
 This project demonstrates the fundamentals of Smooth Particle Hydrodynamics (SPH) for real-time fluid simulation, balancing numerical stability, efficiency, and visual clarity.
 
-## 📖 Abstract
+## Abstract
 
 Fluid Simulation has been a cornerstone problem in both physics-based animation and real-world engineering. This project presents a 2D SPH-based fluid solver implemented from scratch. It integrates real-time visualization via OpenGL and interactive parameter control with ImGui. The work takes inspiration from Sebastian Lague’s intuitive visualizations and is guided by [research literature in SPH modeling], blending theoretical insights with practical engineering.
 
@@ -111,15 +111,15 @@ This project presents a foundational implementation of 2D fluid simulation using
 
 To evolve this from an intermediate to an advanced-level SPH simulator, the following features are planned:
 
-- ✅ Viscosity modeling (artificial and physical viscosity)
+-  Viscosity modeling (artificial and physical viscosity)
 
-- ✅ Surface tension for realistic droplet formation
+-  Surface tension for realistic droplet formation
 
-- ✅ PCISPH/DFSPH solvers for incompressibility
+-  PCISPH/DFSPH solvers for incompressibility
  
-- ✅ GPU acceleration for large-scale real-time simulation
+-  GPU acceleration for large-scale real-time simulation
  
-- ✅ Fluid–rigid body coupling
+-  Fluid–rigid body coupling
 
 
 ## 7. References
@@ -132,7 +132,7 @@ To evolve this from an intermediate to an advanced-level SPH simulator, the foll
 
 
 
-### ⚡ Note:
+### Note:
 
 This project bridges the gap between theory and practice. It begins as an educational framework for learning SPH, but with extensions, it can evolve into a research-grade fluid solver suitable for graphics and engineering applications.
 
