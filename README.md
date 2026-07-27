@@ -70,6 +70,17 @@ make
 ./main
 ```
 
+## 📸 Simulation Gallery
+
+| Wave Generation | Fluid at Rest |
+|:---:|:---:|
+| <img src="Fluid-Simulator/images/sim(2).png" width="400"> | <img src="Fluid-Simulator/images/sim(3).png" width="400"> |
+
+| Simulated Air Pressure | High Tide Simulation |
+|:---:|:---:|
+| <img src="Fluid-Simulator/images/sim(4).png" width="400"> | <img src="Fluid-Simulator/images/sim(5).png" width="400"> |
+
+
 
 ## 📈 Roadmap & Future Enhancements
 **While currently serving as a foundational SPH framework, the architecture is designed with extensibility in mind. Planned upgrades include:**
@@ -81,3 +92,5 @@ make
 *  [ ] Hardware Acceleration: Migrating the neighbor search and force computation to GPU Compute Shaders (CUDA/OpenGL) for massive-scale particle counts.
 
 *  [ ] Two-Way Coupling: Fluid-rigid body interaction mechanics.
+
+
